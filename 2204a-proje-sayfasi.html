@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>2204A Biyoloji Projesi</title>
+<style>
+  :root{
+    --bg:#f6f7f4; --card:#ffffff; --text:#1c2b1e; --muted:#5b6b5d;
+    --accent:#2f7d4f; --accent-dark:#215c39; --border:#e1e5df; --danger:#c0392b;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#12160f; --card:#1b211a; --text:#eef2ea; --muted:#9fb0a1;
+      --accent:#4caf7d; --accent-dark:#7fd9a6; --border:#2b332a;
+    }
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; min-height:100vh; background:var(--bg); color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    display:flex; justify-content:center; padding:32px 16px;
+  }
+  .wrap{width:100%; max-width:520px;}
+  .card{
+    background:var(--card); border:1px solid var(--border); border-radius:16px;
+    padding:28px 24px;
+  }
+  h1{font-size:1.4rem; margin:0 0 6px;}
+  .sub{color:var(--muted); font-size:0.92rem; margin:0 0 20px;}
+  input[type=text]{
+    width:100%; padding:12px 14px; border-radius:10px; border:1px solid var(--border);
+    background:transparent; color:var(--text); font-size:1rem; margin-bottom:16px;
+  }
+  .btn-row{display:flex; gap:10px; flex-wrap:wrap;}
+  button{
+    flex:1; min-width:140px; padding:13px 16px; border-radius:10px; border:none;
+    font-size:0.98rem; font-weight:600; cursor:pointer; transition:opacity .15s;
+  }
+  button:disabled{opacity:.5; cursor:not-allowed;}
+  .btn-yes{background:var(--accent); color:#fff;}
+  .btn-no{background:transparent; color:var(--muted); border:1px solid var(--border);}
+  button:hover:not(:disabled){opacity:.88;}
+  .benefits{margin-top:22px; padding-top:18px; border-top:1px solid var(--border);}
+  .benefits h2{font-size:0.95rem; margin:0 0 10px; color:var(--accent-dark);}
+  .benefits ul{margin:0; padding-left:18px; font-size:0.92rem; line-height:1.7;}
+  .status{font-size:0.9rem; margin-top:14px; padding:10px 12px; border-radius:8px; display:none;}
+  .status.ok{display:block; background:rgba(76,175,125,0.12); color:var(--accent-dark);}
+  .status.err{display:block; background:rgba(192,57,43,0.12); color:var(--danger);}
+  .google-btn{
+    width:100%; display:flex; align-items:center; justify-content:center; gap:10px;
+    background:var(--card); color:var(--text); border:1px solid var(--border);
+    padding:12px 16px; border-radius:10px; font-size:0.95rem; font-weight:600; cursor:pointer;
+  }
+  .connected-box{
+    background:rgba(76,175,125,0.12); color:var(--accent-dark); padding:10px 14px;
+    border-radius:10px; font-size:0.88rem; font-weight:600; margin-bottom:6px; display:none;
+  }
+  .hidden{display:none !important;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="card">
+    <h1>2204A Biyoloji Projesi</h1>
+    <p class="sub">Bu projeye katılmak ister misin?</p>
+
+    <div id="connectStep">
+      <button id="googleConnectBtn" class="google-btn">
+        <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.64-.06-1.25-.16-1.84H9v3.48h4.84a4.14 4.14 0 0 1-1.8 2.72v2.26h2.91c1.7-1.57 2.69-3.88 2.69-6.62z"/><path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.91-2.26c-.81.54-1.85.86-3.05.86-2.34 0-4.33-1.58-5.04-3.71H.96v2.33A9 9 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.96 10.71A5.4 5.4 0 0 1 3.68 9c0-.59.1-1.17.28-1.71V4.96H.96A9 9 0 0 0 0 9c0 1.45.35 2.83.96 4.04l3-2.33z"/><path fill="#EA4335" d="M9 3.58c1.32 0 2.51.45 3.44 1.35l2.58-2.58C13.46.89 11.43 0 9 0A9 9 0 0 0 .96 4.96l3 2.33C4.67 5.16 6.66 3.58 9 3.58z"/></svg>
+        Google ile bağlan
+      </button>
+      <input type="text" id="gEmail" placeholder="google-hesabin@gmail.com" style="margin-top:10px;" />
+      <div class="status err" id="verifyErr">Geçerli bir e-posta adresi gir.</div>
+    </div>
+
+    <div id="connectedBox" class="connected-box">
+      <span id="connectedEmail"></span> ile bağlandın ✓
+    </div>
+
+    <div class="btn-row" style="margin-top:18px;">
+      <button class="btn-yes" id="btnYes" disabled>Katılmak istiyorum</button>
+      <button class="btn-no" id="btnNo" disabled>Katılmak istemiyorum</button>
+    </div>
+
+    <div class="benefits">
+      <h2>Katılırsan neler kazanırsın?</h2>
+      <ul>
+        <li>Proje kapsamında ekstra <strong>YKS puanı / burs başvurularında değerlendirilebilecek bir sertifika</strong> imkanı</li>
+        <li>Gerçek bir biyoloji projesinde <strong>deneyim kazanma</strong> ve özgeçmişine ekleyebileceğin bir referans</li>
+        <li>Küçük bir ekiple birlikte çalışma ve <strong>mentorluk</strong> imkanı</li>
+      </ul>
+    </div>
+
+    <div class="status" id="statusBox"></div>
+  </div>
+</div>
+
+<script>
+// ==== KURULUM: aşağıdaki satırı kendi Formspree form ID'inle değiştir ====
+const FORMSPREE_ENDPOINT = "https://formspree.io/f/xzezakgw";
+// ==========================================================================
+
+const btnYes = document.getElementById('btnYes');
+const btnNo = document.getElementById('btnNo');
+const statusBox = document.getElementById('statusBox');
+const googleConnectBtn = document.getElementById('googleConnectBtn');
+const connectStep = document.getElementById('connectStep');
+const connectedBox = document.getElementById('connectedBox');
+const gEmail = document.getElementById('gEmail');
+const verifyErr = document.getElementById('verifyErr');
+const connectedEmail = document.getElementById('connectedEmail');
+
+let verifiedEmail = null;
+
+googleConnectBtn.addEventListener('click', () => {
+  const email = (gEmail.value || '').trim().toLowerCase();
+  const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  if(!emailOk){
+    verifyErr.classList.add('err');
+    gEmail.focus();
+    return;
+  }
+  verifyErr.classList.remove('err');
+  verifiedEmail = email;
+  connectStep.classList.add('hidden');
+  connectedBox.style.display = 'block';
+  connectedEmail.textContent = verifiedEmail;
+  btnYes.disabled = false;
+  btnNo.disabled = false;
+});
+
+function showStatus(msg, ok){
+  statusBox.textContent = msg;
+  statusBox.className = 'status ' + (ok ? 'ok' : 'err');
+}
+
+async function submit(answer){
+  if(!verifiedEmail){
+    showStatus('Önce Google hesabınla bağlanmalısın.', false);
+    return;
+  }
+  if(FORMSPREE_ENDPOINT.includes('XXXXXXXX')){
+    showStatus('Kurulum tamamlanmadı: FORMSPREE_ENDPOINT henüz ayarlanmamış.', false);
+    return;
+  }
+  btnYes.disabled = true; btnNo.disabled = true;
+  try{
+    const res = await fetch(FORMSPREE_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({
+        account: verifiedEmail,
+        karar: answer === 'yes' ? 'Katılmak istiyor' : 'Katılmak istemiyor',
+        zaman: new Date().toLocaleString('tr-TR')
+      })
+    });
+    if(!res.ok) throw new Error('send-failed');
+    showStatus(answer === 'yes' ? 'Kaydedildi — katılım isteğin alındı!' : 'Kaydedildi — cevabın alındı.', true);
+  }catch(e){
+    showStatus('Gönderilemedi, lütfen tekrar dene.', false);
+    btnYes.disabled = false; btnNo.disabled = false;
+  }
+}
+
+btnYes.addEventListener('click', () => submit('yes'));
+btnNo.addEventListener('click', () => submit('no'));
+</script>
+</body>
+</html>
